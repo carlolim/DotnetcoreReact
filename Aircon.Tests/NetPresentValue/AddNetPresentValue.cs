@@ -2,6 +2,7 @@
 using System.Linq;
 using Aircon.Business;
 using Aircon.Common.Dto;
+using Aircon.Tests.MockDataAccess;
 using Moq;
 using NUnit.Framework;
 
@@ -11,10 +12,12 @@ namespace Aircon.Tests
     public class AddNetPresentValue
     {
         private readonly NetPresentValueBusiness _netPresentValueBusiness;
+        private readonly MockDbContext _moqDbContext;
 
         public AddNetPresentValue()
         {
-            _netPresentValueBusiness = new NetPresentValueBusiness();
+            _moqDbContext = new MockDbContext();
+            _netPresentValueBusiness = new NetPresentValueBusiness(_moqDbContext.MockDbContextDataAccess);
         }
 
         [Test]
@@ -58,6 +61,12 @@ namespace Aircon.Tests
             var actualResult = result[0].NetPresentValue;
 
             Assert.AreEqual(actualResult, expectedResult);
+        }
+
+        [Test]
+        public void Sample()
+        {
+            var test = _moqDbContext.MockDbContextDataAccess.CashFlowInputDataAccess.All().Result;
         }
     }
 }

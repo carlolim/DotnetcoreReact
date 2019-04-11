@@ -4,11 +4,36 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Aircon.Common.Dto;
+using Aircon.DataAccess;
+using Aircon.DataAccess.Entities;
 
 namespace Aircon.Business
 {
     public class NetPresentValueBusiness : INetPresentValueBusiness
     {
+        private readonly IDbContext _dbContext;
+
+        public NetPresentValueBusiness(IDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public async Task<IEnumerable<CashFlowResultDto>> Add(NpvCalculateParameter data)
+        {
+            var calculateResult = Calculate(data);
+            if (calculateResult.Count() > 0)
+            {
+                List<CashFlowInput> cashFlowInputs = data.CashFlows.Select(m => new CashFlowInput
+                {
+                    Amount = m.Amount,
+                    Period = m.Period,
+                    TransactionInputId = 1
+                }).ToList();
+            }
+
+            return null;
+        }
+
         public IEnumerable<CashFlowResultDto> Calculate(NpvCalculateParameter data)
         {
             for (var discount = data.LowerBoundDiscount;

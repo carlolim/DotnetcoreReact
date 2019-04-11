@@ -58,6 +58,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MockDataAccess\MockCashFlowInput.cs" />
+    <Compile Include="MockDataAccess\MockDbContext.cs" />
     <Compile Include="NetPresentValue\AddNetPresentValue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -72,6 +74,10 @@
     <ProjectReference Include="..\Aircon.Common\Aircon.Common.csproj">
       <Project>{942c06a3-7819-452a-8aa9-ad15500c6f08}</Project>
       <Name>Aircon.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Aircon.DataAccess\Aircon.DataAccess.csproj">
+      <Project>{95734FF5-A764-4771-B26D-319F1C58D981}</Project>
+      <Name>Aircon.DataAccess</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

@@ -67,7 +67,7 @@ namespace Aircon.DataAccess
             using (IDbConnection db = new SqlConnection(ConnectionString))
             {
                 var result = db.BulkInsert(data);
-                return new Result { IsSuccess = result.Current.Any() };
+                return new Result { IsSuccess = result.CurrentItem.Any() };
             }
         }
     }

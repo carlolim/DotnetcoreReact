@@ -8,14 +8,14 @@ namespace Aircon.DataAccess
     public class DbContext : IDbContext
     {
         public ICashFlowInputDataAccess CashFlowInputDataAccess { get; set; }
-        public IGenericBase<CashFlowResult> CashFlowResultDataAccess { get; set; }
+        public ICashFlowResultDataAccess CashFlowResultDataAccess { get; set; }
         public IGenericBase<TransactionInput> TransactionInputDataAccess { get; set; }
-        public IGenericBase<TransactionResult> TransactionResultDataAccess { get; set; }
+        public ITransactionResultDataAccess TransactionResultDataAccess { get; set; }
 
         public DbContext(ICashFlowInputDataAccess cashFlowInputDataAccess,
-            IGenericBase<CashFlowResult> cashFlowResultDataAccess,
+            ICashFlowResultDataAccess cashFlowResultDataAccess,
             IGenericBase<TransactionInput> transactionInputDataAccess,
-            IGenericBase<TransactionResult> transactionResultDataAccess
+            ITransactionResultDataAccess transactionResultDataAccess
             )
         {
             CashFlowInputDataAccess = cashFlowInputDataAccess;

@@ -6,8 +6,8 @@ namespace Aircon.Common.Dto
 {
     public class CashFlowResultDto
     {
-        public List<CashFlow> CashFlows { get; set; }
-        public double DiscountRate { get; set; }
-        public decimal NetPresentValue { get; set; }
+        public int Period { get; set; }
+        public decimal Amount { get; set; }
+        public decimal Value { get; set; }
     }
 }

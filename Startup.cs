@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StructureMap;
 using Aircon.Common.AppSettings;
+using Aircon.DataAccess;
 
 namespace aircon
 {
@@ -49,8 +50,11 @@ namespace aircon
                     _.LookForRegistries();
                 });
 
+                config.For(typeof(IGenericBase<>)).Use(typeof(GenericBase<>));
+
                 config.Populate(services);
             });
+            
 
             return container.GetInstance<IServiceProvider>();
         }

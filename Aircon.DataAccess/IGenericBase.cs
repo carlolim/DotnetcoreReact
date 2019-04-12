@@ -13,5 +13,6 @@ namespace Aircon.DataAccess
         Task<Result> Delete(T data);
         Task<Result> Insert(T data);
         Task<Result> Update(T data);
+        Result BulkInsert(List<T> data);
     }
 }

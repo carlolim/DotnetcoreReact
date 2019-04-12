@@ -7,6 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Dapper.Contrib" Version="1.60.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="1.1.0" />
+    <PackageReference Include="Z.Dapper.Plus" Version="1.5.1" />
   </ItemGroup>
 
   <ItemGroup>

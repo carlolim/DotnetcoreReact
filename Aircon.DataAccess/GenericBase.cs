@@ -4,11 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dapper;
 using Dapper.Contrib.Extensions;
 using Aircon.Common;
+using Z.Dapper.Plus;
 
 namespace Aircon.DataAccess
 {
@@ -20,7 +22,7 @@ namespace Aircon.DataAccess
             ConnectionString = connectionStrings.Value.MainDatabase;
         }
 
-        //all(ok), by id(ok), insert(ok), update(ok), delete, bulk insert, bulk update, bulk delete
+        //all(ok), by id(ok), insert(ok), update(ok), delete(ok), bulk insert, bulk update, bulk delete
         public async Task<IEnumerable<T>> All()
         {
             using (IDbConnection db = new SqlConnection(ConnectionString))
@@ -57,6 +59,15 @@ namespace Aircon.DataAccess
             {
                 var result = await db.DeleteAsync(data);
                 return new Result { IsSuccess = result };
+            }
+        }
+
+        public Result BulkInsert(List<T> data)
+        {
+            using (IDbConnection db = new SqlConnection(ConnectionString))
+            {
+                var result = db.BulkInsert(data);
+                return new Result { IsSuccess = result.Current.Any() };
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using Aircon.Common.Dto;
 using Aircon.DataAccess;
 using Aircon.DataAccess.Entities;
@@ -20,18 +21,48 @@ namespace Aircon.Business
 
         public async Task<IEnumerable<CashFlowResultDto>> Add(NpvCalculateParameter data)
         {
-            var calculateResult = Calculate(data);
+            var calculateResult = Calculate(data).ToList();
             if (calculateResult.Count() > 0)
             {
-                List<CashFlowInput> cashFlowInputs = data.CashFlows.Select(m => new CashFlowInput
+                #region Prepare data for database transacions
+                var cashFlowInputs = data.CashFlows.Select(m => new CashFlowInput
                 {
                     Amount = m.Amount,
                     Period = m.Period,
-                    TransactionInputId = 1
+                    TransactionInputId = 0
                 }).ToList();
+                var transactionInput = new TransactionInput
+                {
+                    Amount = data.Amount,
+                    DiscountRate = data.DiscountIncrement,
+                    UpperBoundDiscount = data.UpperBoundDiscount,
+                    LowerBoundDiscount = data.LowerBoundDiscount,
+                    DateAdded = DateTime.Now
+                };
+                var transactionResult = calculateResult.Select(m => new TransactionResult
+                {
+                    NetPresentValue = m.NetPresentValue,
+                    DiscountRate = m.DiscountRate
+                }).ToList();
+                #endregion
+
+                using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    try
+                    {
+                        var transactionInputResult = await _dbContext.TransactionInputDataAccess.Insert(transactionInput);
+                        cashFlowInputs = cashFlowInputs.Select(m => { m.TransactionInputId = transactionInputResult.Id; return m; }).ToList();
+                        var cashFlowInputResult = _dbContext.CashFlowInputDataAccess.BulkInsert(cashFlowInputs);
+                        transactionScope.Complete();
+                    }
+                    catch (Exception ex) //TODO: logger
+                    {
+                        calculateResult = new List<CashFlowResultDto>();
+                    }
+                }
             }
 
-            return null;
+            return calculateResult;
         }
 
         public IEnumerable<CashFlowResultDto> Calculate(NpvCalculateParameter data)

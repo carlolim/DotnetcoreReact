@@ -7,7 +7,7 @@ namespace Aircon.DataAccess.Entities
     {
         [Key]
         public int TransactionResultId { get; set; }
-        public decimal DiscountRate { get; set; }
+        public double DiscountRate { get; set; }
         public decimal NetPresentValue { get; set; }
     }
 
